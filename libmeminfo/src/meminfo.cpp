@@ -260,8 +260,8 @@ int64_t GetAppsTotalMemory(const std::vector<int> &pidList)
     }
     int64_t pssAndSwapPssMem = 0;
     int64_t gpuMem = 0;
-    uint64_t gl;
-    uint64_t graph;
+    uint64_t gl = 0;
+    uint64_t graph = 0;
 
     for (auto pid : pidList) {
         pssAndSwapPssMem += static_cast<int64_t>(GetPssAndSwapPssByPid(pid));
