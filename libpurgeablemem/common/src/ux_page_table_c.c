@@ -313,7 +313,7 @@ static void UxpteClear_(uxpte_t *pte)
     if ((unsigned long long)old == 0) {
         return; /* has been set to zero */
     }
-    HILOG_ERROR(LOG_CORE, "%{public}s: upte(0x%{public}llx) != 0", __func__, (unsigned long long)old);
+    HILOG_ERROR(LOG_CORE, "%{public}s: upte(0x%{private}llx) != 0", __func__, (unsigned long long)old);
     do {
         old = UxpteLoad(pte);
     } while (!UxpteCAS_(pte, old, 0));
@@ -333,7 +333,7 @@ static void GetUxpteAt(UxPageTableStruct *upt, uint64_t addr)
     size_t index = GetIndexInUxpte(upt->dataAddr, addr);
     UxpteAdd(&(upt->uxpte[index]), UXPTE_REFCNT_ONE);
 
-    HILOG_DEBUG(LOG_CORE, "%{public}s: addr(0x%{public}llx) upte=0x%{public}llx",
+    HILOG_DEBUG(LOG_CORE, "%{public}s: addr(0x%{private}llx) upte=0x%{private}llx",
         __func__, (unsigned long long)addr, (unsigned long long)(upt->uxpte[index]));
 }
 
@@ -346,7 +346,7 @@ static void PutUxpteAt(UxPageTableStruct *upt, uint64_t addr)
     size_t index = GetIndexInUxpte(upt->dataAddr, addr);
     UxpteSub(&(upt->uxpte[index]), UXPTE_REFCNT_ONE);
 
-    HILOG_DEBUG(LOG_CORE, "%{public}s: addr(0x%{public}llx) upte=0x%{public}llx",
+    HILOG_DEBUG(LOG_CORE, "%{public}s: addr(0x%{private}llx) upte=0x%{private}llx",
         __func__, (unsigned long long)addr, (unsigned long long)(upt->uxpte[index]));
 }
 
@@ -364,7 +364,7 @@ static bool IsPresentAt(UxPageTableStruct *upt, uint64_t addr)
 {
     size_t index = GetIndexInUxpte(upt->dataAddr, addr);
 
-    HILOG_DEBUG(LOG_CORE, "%{public}s: addr(0x%{public}llx) upte=0x%{public}llx PRESENT_MASK=0x%{public}zx",
+    HILOG_DEBUG(LOG_CORE, "%{public}s: addr(0x%{private}llx) upte=0x%{private}llx PRESENT_MASK=0x%{public}zx",
         __func__, (unsigned long long)addr, (unsigned long long)(upt->uxpte[index]), UXPTE_PRESENT_MASK);
 
     return IsUxptePresent(upt->uxpte[index]);
@@ -378,8 +378,8 @@ static PMState UxpteOps(UxPageTableStruct *upt, uint64_t addr, size_t len, enum 
     uint64_t start =  RoundDown(addr, PAGE_SIZE);
     uint64_t end = RoundUp(addr + len, PAGE_SIZE);
     if (start < upt->dataAddr || end > (upt->dataAddr + upt->dataSize)) {
-        HILOG_ERROR(LOG_CORE, "%{public}s: addr(0x%{public}llx) start(0x%{public}llx) < dataAddr(0x%{public}llx)"
-            " || end(0x%{public}llx) > dataAddr+dataSize(0x%{public}llx) out of bound",
+        HILOG_ERROR(LOG_CORE, "%{public}s: addr(0x%{private}llx) start(0x%{private}llx) < dataAddr(0x%{private}llx)"
+            " || end(0x%{private}llx) > dataAddr+dataSize(0x%{private}llx) out of bound",
             __func__, (unsigned long long)addr, (unsigned long long)start, (unsigned long long)(upt->dataAddr),
             (unsigned long long)end, (unsigned long long)(upt->dataAddr + upt->dataSize));
 
@@ -402,7 +402,7 @@ static PMState UxpteOps(UxPageTableStruct *upt, uint64_t addr, size_t len, enum 
             }
             case UPT_IS_PRESENT: {
                 if (!IsPresentAt(upt, off)) {
-                    HILOG_ERROR(LOG_CORE, "%{public}s: addr(0x%{public}llx) not present", __func__,
+                    HILOG_ERROR(LOG_CORE, "%{public}s: addr(0x%{private}llx) not present", __func__,
                         (unsigned long long)addr);
                     return PM_UXPT_NO_PRESENT;
                 }
