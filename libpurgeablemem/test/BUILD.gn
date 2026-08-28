@@ -21,14 +21,22 @@ purgeable_external_deps = [
   "bounds_checking_function:libsec_shared",
   "c_utils:utils",
   "hilog:libhilog",
+  "hitrace:hitrace_meter",
+  "init:libbegetutil",
+  "ipc:ipc_core",
 ]
 
 ohos_unittest("purgeable_c_test") {
   module_out_path = module_output_path
   sources = [ "purgeable_c_test.cpp" ]
   if (is_standard_system) {
-    deps = [ "//commonlibrary/memory_utils/libpurgeablemem:libpurgeablemem" ]
+    public_deps = [ "//commonlibrary/memory_utils/libpurgeablemem:libpurgeablemem_sources" ]
     external_deps = purgeable_external_deps
+  }
+  sanitize = {
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
   }
 
   subsystem_name = "commonlibrary"
@@ -39,8 +47,13 @@ ohos_unittest("purgeable_cpp_test") {
   module_out_path = module_output_path
   sources = [ "purgeable_cpp_test.cpp" ]
   if (is_standard_system) {
-    deps = [ "//commonlibrary/memory_utils/libpurgeablemem:libpurgeablemem" ]
+    public_deps = [ "//commonlibrary/memory_utils/libpurgeablemem:libpurgeablemem_sources" ]
     external_deps = purgeable_external_deps
+  }
+  sanitize = {
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
   }
 
   subsystem_name = "commonlibrary"
@@ -51,10 +64,15 @@ ohos_unittest("purgeable_memory_test") {
   module_out_path = module_output_path
   sources = [ "purgeable_memory_test.cpp" ]
   if (is_standard_system) {
-    deps = [ "//commonlibrary/memory_utils/libpurgeablemem:libpurgeablemem" ]
+    public_deps = [ "//commonlibrary/memory_utils/libpurgeablemem:libpurgeablemem_sources" ]
     external_deps = purgeable_external_deps
   }
-
+  sanitize = {
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
+  }
+  
   subsystem_name = "commonlibrary"
   part_name = "memory_utils"
 }
@@ -63,8 +81,13 @@ ohos_unittest("purgeableashmem_test") {
   module_out_path = module_output_path
   sources = [ "purgeableashmem_test.cpp" ]
   if (is_standard_system) {
-    deps = [ "//commonlibrary/memory_utils/libpurgeablemem:libpurgeablemem" ]
+    public_deps = [ "//commonlibrary/memory_utils/libpurgeablemem:libpurgeablemem_sources" ]
     external_deps = purgeable_external_deps
+  }
+  sanitize = {
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
   }
 
   subsystem_name = "commonlibrary"
