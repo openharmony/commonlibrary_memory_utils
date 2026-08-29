@@ -18,6 +18,7 @@ config("libmeminfo_config") {
 }
 
 ohos_shared_library("libmeminfo") {
+  version_script = "libmeminfo.map"
   sources = [ "src/meminfo.cpp" ]
   include_dirs = [ "include" ]
   external_deps = [

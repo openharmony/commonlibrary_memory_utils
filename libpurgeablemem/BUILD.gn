@@ -24,7 +24,7 @@ config("libpurgeable_config") {
   cflags_cc = [ "-fexceptions" ]
 }
 
-ohos_shared_library("libpurgeablemem") {
+ohos_source_set("libpurgeablemem_sources") {
   sources = [
     "c/src/purgeable_mem_builder_c.c",
     "c/src/purgeable_mem_c.c",
@@ -58,7 +58,31 @@ ohos_shared_library("libpurgeablemem") {
   branch_protector_ret = "pac_ret"
 }
 
+ohos_shared_library("libpurgeablemem"){
+  version_script = "libpurgeablemem.map"
+  deps = [ ":libpurgeablemem_sources" ]
+  public_configs = [ ":libpurgeable_config" ]
+  external_deps = [
+    "bounds_checking_function:libsec_shared",
+    "c_utils:utils",
+    "hilog:libhilog",
+    "hitrace:hitrace_meter",
+    "init:libbegetutil",
+    "ipc:ipc_core",
+  ]
+  subsystem_name = "commonlibrary"
+  part_name = "memory_utils"
+  
+  sanitize = {
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
+  }
+  branch_protector_ret = "pac_ret"
+}
+
 ohos_shared_library("purgeable_memory_ndk") {
+  version_script = "libpurgeable_memory_ndk.map"
   include_dirs = [ "interfaces/kits/c" ]
 
   sources = [ "c/src/purgeable_memory.c" ]
