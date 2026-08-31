@@ -14,6 +14,7 @@
  */
 
 #include "meminfo.h"
+#include "parse_rss_pages.h"
 
 #include <fstream>
 #include <sstream>
@@ -127,7 +128,12 @@ uint64_t GetRssByPid(const int pid)
     std::istringstream isStatm(statm);
     isStatm >> vss >> rss; // pages
 
-    size = static_cast<uint64_t>(atoi(rss.c_str()) * PAGE_TO_KB);
+    uint64_t pages = 0;
+    if (!ParseRssPages(rss, pages)) {
+        HILOG_ERROR(LOG_CORE, "invalid rss pages %{public}s", rss.c_str());
+        return size;
+    }
+    size = pages * static_cast<uint64_t>(PAGE_TO_KB);
     return size;
 }
 
